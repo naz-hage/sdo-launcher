@@ -1,6 +1,6 @@
 # YAML Launcher Schema Reference
 
-This document provides the complete YAML schema specification for the ntools-launcher executable configuration format.
+This document provides the complete YAML schema specification for the sdo-launcher executable configuration format.
 
 ---
 

@@ -1,6 +1,6 @@
-# Integration Examples: test-framework, sdooo, ntools-launcher
+# Integration Examples: test-framework, sdooo, sdo-launcher
 
-This document shows concrete examples of how test-framework scenarios, sdooo deployments, and ntools-launcher orchestrations can be unified under the YAML launcher schema with assertion and result passing support.
+This document shows concrete examples of how test-framework scenarios, sdooo deployments, and sdo-launcher orchestrations can be unified under the YAML launcher schema with assertion and result passing support.
 
 ---
 
@@ -247,7 +247,7 @@ execution:
 
 ---
 
-## Example 3: ntools-launcher Process Orchestration
+## Example 3: sdo-launcher Process Orchestration
 
 ### Current Pattern (Direct Process.LockVerifyStart)
 
@@ -273,7 +273,7 @@ public async Task DeployAsync()
 
 ```yaml
 version: "1.0"
-description: "Complex ntools-launcher orchestration"
+description: "Complex sdo-launcher orchestration"
 
 variables:
   WorkspaceRoot: "C:\\workspace"
@@ -573,7 +573,7 @@ execution:
 
 ## Schema Comparison Table
 
-| Capability | test-framework | sdo | ntools-launcher | YAML Launcher (Unified) |
+| Capability | test-framework | sdo | sdo-launcher | YAML Launcher (Unified) |
 |-----------|---|---|---|---|
 | Execute executable | ✅ | ✅ | ✅ | ✅ |
 | Capture output | ✅ | ✅ | ✅ | ✅ |
@@ -604,7 +604,7 @@ execution:
 3. `sdo deploy --yaml deployment-plan.yaml` new command
 4. JSON approach becomes "simple case" of YAML launcher
 
-### ntools-launcher
+### sdo-launcher
 1. New IStepExecutor interface consumes YAML launcher configs
 2. Existing Process.LockVerifyStart() calls can be replaced with YAML
 3. Complex multi-step orchestrations now declarative instead of imperative
@@ -617,7 +617,7 @@ execution:
 After implementation:
 - ✅ 90%+ of test-framework scenarios expressible in YAML launcher
 - ✅ Complex sdo deployments simplified from code to YAML config
-- ✅ ntools-launcher users have declarative alternative to imperative code
+- ✅ sdo-launcher users have declarative alternative to imperative code
 - ✅ Variables flowing between steps reduces configuration duplication
 - ✅ Unified assertion language across all three codebases
 - ✅ 100% backward compatibility - existing code/configs still work

@@ -6,7 +6,7 @@ using YamlLauncher.TestRunners;
 namespace Ntools.Tests
 {
     /// <summary>
-    /// Validation test for the converted ntools-launcher YAML format.
+    /// Validation test for the converted sdo-launcher YAML format.
     /// Tests that the YAML configuration can be loaded and executed correctly.
     /// This is Phase 3 (Execution & Validation) of the conversion work item.
     /// </summary>
@@ -151,7 +151,7 @@ namespace Ntools.Tests
                 Console.WriteLine("  ✅ Variables substituted in subsequent steps");
                 Console.WriteLine("  ✅ Assertions evaluated correctly");
                 Console.WriteLine("\nConversion Validation: SUCCESS");
-                Console.WriteLine("The ntools-launcher YAML format works correctly!");
+                Console.WriteLine("The sdo-launcher YAML format works correctly!");
                 Console.WriteLine("════════════════════════════════════════════════════════\n");
             }
             catch (Exception ex)

@@ -92,7 +92,7 @@ steps:
 
         public static TemporaryMetadata Create(string yaml)
         {
-            var path = System.IO.Path.Combine(System.IO.Path.GetTempPath(), $"ntools-launcher-tests-{Guid.NewGuid():N}");
+            var path = System.IO.Path.Combine(System.IO.Path.GetTempPath(), $"sdo-launcher-tests-{Guid.NewGuid():N}");
             Directory.CreateDirectory(path);
             File.WriteAllText(System.IO.Path.Combine(path, "Test_MigratedRunnerBehavior.yaml"), yaml);
             File.WriteAllText(System.IO.Path.Combine(path, "Test_MigratedFailFast.yaml"), yaml);

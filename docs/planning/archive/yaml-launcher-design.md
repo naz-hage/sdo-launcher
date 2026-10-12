@@ -1,14 +1,14 @@
 # YAML-Based Steps Launcher Design Plan
 
 **Date:** May 25, 2026  
-**Purpose:** Design a unified YAML-based executable launcher framework to extend ntools-launcher NuGet package  
+**Purpose:** Design a unified YAML-based executable launcher framework to extend sdo-launcher NuGet package  
 **Scope:** Single file containing one or many executables with exe and arguments, supporting sequential or parallel execution patterns
 
 ---
 
 ## 1. Executive Summary
 
-This design creates a new API layer for ntools-launcher that accepts YAML configuration files instead of Process objects. The framework unifies executable launching patterns across three codebases (test-framework, sdooo, ntools-launcher) into a single, extensible design.
+This design creates a new API layer for sdo-launcher that accepts YAML configuration files instead of Process objects. The framework unifies executable launching patterns across three codebases (test-framework, sdooo, sdo-launcher) into a single, extensible design.
 
 **Key Benefits:**
 - Declarative YAML-based configuration eliminates boilerplate Process creation code
@@ -32,7 +32,7 @@ var result = await executor.ExecuteAsync("install", new[] { "--name", "MyApp" })
 - **Weakness:** Hard-coded arguments in test code, no declarative configuration
 - **Use Case:** E2E testing, CLI validation
 
-#### Pattern B: ntools-launcher/Launcher
+#### Pattern B: sdo-launcher/Launcher
 ```csharp
 var process = new Process { StartInfo = ... };
 var result = process.LockVerifyStart(verbose);  // with signature verification
@@ -162,7 +162,7 @@ execution:
 
 ## 4. Core API Design
 
-### 4.1 New Public APIs for ntools-launcher
+### 4.1 New Public APIs for sdo-launcher
 
 ```csharp
 namespace Ntools.Launcher
@@ -367,7 +367,7 @@ Console.WriteLine($"Completed: {result.Results.Count - failedCount}/{result.Resu
 
 ## 6. Integration Points
 
-### 6.1 ntools-launcher NuGet Package
+### 6.1 sdo-launcher NuGet Package
 
 **Current:** Manual Process creation and signature verification  
 **New:** YAML-based configuration + signature verification built-in
@@ -479,7 +479,7 @@ environment:
 ## 8. File Organization
 
 ```
-ntools-launcher/
+sdo-launcher/
 ├── launcher/
 │   ├── Launcher.cs                    (existing, refactored)
 │   ├── YamlLauncher/

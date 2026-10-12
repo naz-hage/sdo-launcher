@@ -8,14 +8,14 @@
 
 ## Problem Statement
 
-Three codebases (test-framework, sdo, ntools-launcher) independently solve similar problems:
+Three codebases (test-framework, sdo, sdo-launcher) independently solve similar problems:
 - **test-framework:** Metadata-driven execution with output capture, assertions, variable extraction
 - **sdo:** Currently uses JSON manifests for app installation with verification (will migrate to YAML)
-- **ntools-launcher:** Process orchestration with signature verification
+- **sdo-launcher:** Process orchestration with signature verification
 
 **Current State:** 
 - Each has its own approach to orchestration
-- test-framework's output assertions/variable extraction not available in sdo or ntools-launcher
+- test-framework's output assertions/variable extraction not available in sdo or sdo-launcher
 - No unified way to describe multi-step deployments across repositories
 - Duplicated logic for assertion validation, error handling, result passing
 
@@ -347,7 +347,7 @@ steps:  # Canonical form; can also use 'tasks' or 'apps'
 
 ---
 
-## ntools-launcher Compatibility
+## sdo-launcher Compatibility
 
 ### Current Process-Based Pattern
 ```csharp
@@ -474,7 +474,7 @@ Parses JSON output and validates with JSONPath.
 - ✅ All current YAML launcher configs work unchanged
 - ✅ All test-framework scenarios can be expressed in YAML launcher
 - ✅ All sdo deployments can be orchestrated in YAML launcher
-- ✅ All ntools-launcher orchestrations can be described in YAML launcher
+- ✅ All sdo-launcher orchestrations can be described in YAML launcher
 
 ### API Success
 - ✅ IStepExecutor interface unchanged
@@ -590,7 +590,7 @@ Parses JSON output and validates with JSONPath.
 ## Questions & Answers
 
 ### Q: How is this different from test-framework's metadata?
-**A:** This unifies test-framework's approach with sdo's and ntools-launcher's patterns. Test-framework has assertions/extraction; this extends those to all three codebases.
+**A:** This unifies test-framework's approach with sdo's and sdo-launcher's patterns. Test-framework has assertions/extraction; this extends those to all three codebases.
 
 ### Q: Will existing test-framework tests still work?
 **A:** Yes. Can coexist. MetadataTestExecutor can be compatibility layer or gradually migrated to StepExecutor.
@@ -644,13 +644,13 @@ Parses JSON output and validates with JSONPath.
 
 This design **enables complete replacement** of existing code in all three repositories with the unified YAML launcher approach. The final requirement is:
 
-> **Within 6 months: All executable orchestration across ntools-launcher, sdo, and test-framework uses the single YAML launcher framework.**
+> **Within 6 months: All executable orchestration across sdo-launcher, sdo, and test-framework uses the single YAML launcher framework.**
 
 ---
 
 ### Phase Breakdown: Replacing Legacy Code
 
-#### Phase 1-2: ntools-launcher Transition (Weeks 1-4)
+#### Phase 1-2: sdo-launcher Transition (Weeks 1-4)
 **Current State:** Process.LockVerifyStart() and manual orchestration in C#
 
 **Transition Strategy:**
@@ -660,7 +660,7 @@ This design **enables complete replacement** of existing code in all three repos
    - Status: **Coexistence**
 
 2. **Week 2-4 (Integration & Refactoring):**
-   - All internal ntools-launcher orchestrations migrated to YAML
+   - All internal sdo-launcher orchestrations migrated to YAML
    - Launcher.cs refactored to use new framework internally
    - External API remains unchanged (backward compatible)
    - Status: **Internal Migration Complete**
@@ -671,7 +671,7 @@ This design **enables complete replacement** of existing code in all three repos
    - New projects default to YAML approach
    - Status: **Legacy Path Documented**
 
-**Requirement:** By end of Week 4, 100% of ntools-launcher's new functionality uses YAML launcher.
+**Requirement:** By end of Week 4, 100% of sdo-launcher's new functionality uses YAML launcher.
 
 ---
 
@@ -744,7 +744,7 @@ This design **enables complete replacement** of existing code in all three repos
 ```
 Before (Current - 3 Separate Systems):
 ┌──────────────────────┐  ┌──────────────┐  ┌─────────────────────┐
-│ ntools-launcher      │  │ sdo           │  │ test-framework      │
+│ sdo-launcher      │  │ sdo           │  │ test-framework      │
 │ Process API          │  │ JSON Manifest│  │ MetadataTestExecutor│
 │ Orchestration Logic  │  │ Commands     │  │ Assertions Engine   │
 └──────────────────────┘  └──────────────┘  └─────────────────────┘
@@ -768,7 +768,7 @@ After (Unified - Single System):
 ├─────────────────────────────────────────────────────────────────┤
 │ Layered Usage (All using same framework, different interfaces)  │
 ├──────────────────────┬──────────────────┬──────────────────────┤
-│ ntools-launcher      │ sdo               │ test-framework       │
+│ sdo-launcher      │ sdo               │ test-framework       │
 │ IStepExecutor       │ sdoo install       │ StepExecutor         │
 │ LaunchAsync(yaml)    │ sdo deploy        │ MetadataTestExecutor │
 │ Legacy: Launcher.cs  │ JSON auto-conv   │ Legacy: Metadata     │
@@ -783,11 +783,11 @@ After (Unified - Single System):
 Week 1-2: Phase 1 - Foundation
 ├─ YamlLauncherConfigLoader working
 ├─ StepExecutor for single steps
-├─ ntools-launcher: Available alongside Process API
+├─ sdo-launcher: Available alongside Process API
 └─ Status: Parallel systems
 
-Week 2-4: Phase 2 - ntools-launcher Integration
-├─ Refactor ntools-launcher to use YAML internally
+Week 2-4: Phase 2 - sdo-launcher Integration
+├─ Refactor sdo-launcher to use YAML internally
 ├─ Process.LockVerifyStart() delegates to StepExecutor
 ├─ sdo: Added `sdo install --yaml`
 ├─ test-framework: Compatibility layer in place
@@ -826,7 +826,7 @@ Month 4-6: Adoption & Deprecation
 
 ### Code Replacement Examples
 
-#### ntools-launcher: From Process API to YAML
+#### sdo-launcher: From Process API to YAML
 
 **Before (Current):**
 ```csharp
@@ -970,7 +970,7 @@ steps:  # Canonical form
 #### Requirement 4: Cross-Repository Orchestration ✅
 **Status:** Design supports this
 - Can orchestrate sdo → test-framework scenarios
-- Can orchestrate test-framework → ntools-launcher deployments
+- Can orchestrate test-framework → sdo-launcher deployments
 - Variables flow across repository boundaries
 
 #### Requirement 5: Simplified Codebase Maintenance ✅
@@ -985,7 +985,7 @@ steps:  # Canonical form
 ### Success Criteria for Rolling Adoption
 
 **Month 1 (Weeks 1-4):**
-- ✅ ntools-launcher fully uses YAML launcher internally
+- ✅ sdo-launcher fully uses YAML launcher internally
 - ✅ sdoo supports YAML deployments
 - ✅ test-framework uses unified framework internally
 - ✅ All existing code continues to work
@@ -993,7 +993,7 @@ steps:  # Canonical form
 
 **Month 2 (Weeks 5-8):**
 - ✅ 80% of new test-framework scenarios in unified schema
-- ✅ 90% of ntools-launcher orchestrations in YAML
+- ✅ 90% of sdo-launcher orchestrations in YAML
 - ✅ sdo complex deployments use YAML by default
 - ✅ Cross-repository orchestration working
 - ✅ Documentation updated for unified approach
@@ -1015,7 +1015,7 @@ steps:  # Canonical form
 - Timeline shared with all teams
 
 **Week 4:** Phase 1 completion
-- ntools-launcher uses YAML internally
+- sdo-launcher uses YAML internally
 - Demo shows code reduction (15 → 3 lines)
 - Migration guide published
 

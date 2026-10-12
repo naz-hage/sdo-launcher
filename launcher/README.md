@@ -1,6 +1,6 @@
-# ntools-launcher
+# sdo-launcher
 
-The `ntools-launcher` is a NuGet package library that simplifies common tasks related to launching executables, downloading files, executing shell commands, and checking process elevation. This library is designed to be easy to use, while providing robust functionality for a variety of tasks. Full Documentation can be found [here](https://naz-hage.github.io/ntools-launcher/).
+The `sdo-launcher` is a NuGet package library that simplifies common tasks related to launching executables, downloading files, executing shell commands, and checking process elevation. This library is designed to be easy to use, while providing robust functionality for a variety of tasks. Full Documentation can be found [here](https://naz-hage.github.io/sdo-launcher/).
 
 ## Prerequisites
 
@@ -22,10 +22,10 @@ The `ntools-launcher` is a NuGet package library that simplifies common tasks re
 
 ## Installation
 
-The `ntools-launcher` package is available on nuget.org. To install the package, run the following command in the Package Manager Console:
+The `sdo-launcher` package is available on nuget.org. To install the package, run the following command in the Package Manager Console:
 
 ```bash
-Install-Package ntools-launcher
+Install-Package sdo-launcher
 ```
 
 ## Usage

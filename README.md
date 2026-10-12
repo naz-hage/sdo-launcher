@@ -1,13 +1,13 @@
-# ntools-launcher
+# sdo-launcher
 
-- Checkout the [documentation](https://naz-hage.github.io/ntools-launcher/) for more information.
+- Checkout the [documentation](https://naz-hage.github.io/sdo-launcher/) for more information.
 
 ## Prerequisites
 
 - .NET 10.0 or later
 
 ## Distribution
-- This class library is released to nuget.org as `ntools-launcher` package.
+- This class library is released to nuget.org as `sdo-launcher` package.
 
 ## Usage
 - Check out the [README](./launcher/README.md) file for usage examples.

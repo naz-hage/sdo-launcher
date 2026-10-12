@@ -114,7 +114,7 @@ All three properties parse to the same execution engine.
 ## File Locations
 
 ```
-c:\source\ntools-launcher\docs\planning\
+c:\source\sdo-launcher\docs\planning\
 ├── DESIGN-SUMMARY.md                    ✅ Updated
 ├── yaml-launcher-design.md              ✅ Updated  
 ├── yaml-schema-reference.md             ✅ Updated
@@ -124,7 +124,7 @@ c:\source\ntools-launcher\docs\planning\
 ├── ARCHITECTURAL-DECISIONS.md           ⏳ Needs review
 └── DESIGN-PACKAGE-INDEX.md              ⏳ Needs review
 
-c:\source\ntools-launcher\.temp\
+c:\source\sdo-launcher\.temp\
 ├── wi-01-add-yamldotnet-dependency.md           ✅ Current
 ├── wi-02-create-model-classes.md               ✅ Updated
 ├── wi-03-implement-yaml-config-loader.md       ⏳ Needs update

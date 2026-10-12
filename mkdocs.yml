@@ -1,7 +1,7 @@
 site_name: NTools Launcher
 site_description: .NET library for secure process launching, file downloading, and shell operations
 site_author: naz-hage
-repo_name: ntools-launcher
+repo_name: sdo-launcher
 repo_url: https://github.com/naz-hage/sdo-launcher
 edit_uri: edit/main/docs/
 

@@ -12,7 +12,7 @@ using YamlLauncher.Models;
 namespace YamlLauncher.TestRunners;
 
 /// <summary>
-/// Test runner for ntools-launcher YAML configuration files.
+/// Test runner for sdo-launcher YAML configuration files.
 /// Loads YAML configurations, validates them, executes steps, and extracts variables from output.
 /// </summary>
 public class NtoolsLauncherTestRunner
@@ -27,7 +27,7 @@ public class NtoolsLauncherTestRunner
     }
 
     /// <summary>
-    /// Runs a test by name from the ntools-launcher YAML metadata.
+    /// Runs a test by name from the sdo-launcher YAML metadata.
     /// </summary>
     public async Task<bool> RunTestAsync(string testName)
     {
@@ -41,7 +41,7 @@ public class NtoolsLauncherTestRunner
                 return false;
             }
 
-            ConsoleHelper.WriteLine($"{'='} Running ntools-launcher Test: {testName} {'='}");
+            ConsoleHelper.WriteLine($"{'='} Running sdo-launcher Test: {testName} {'='}");
             // display solid line to separate test output from previous console output
             ConsoleHelper.SolidLine();
 
@@ -263,7 +263,7 @@ public class NtoolsLauncherTestRunner
     }
 
     /// <summary>
-    /// Lists all available ntools-launcher YAML test files.
+    /// Lists all available sdo-launcher YAML test files.
     /// </summary>
     public void ListTests()
     {
@@ -458,6 +458,9 @@ public class NtoolsLauncherTestRunner
                 ? StringComparison.OrdinalIgnoreCase
                 : StringComparison.Ordinal;
             var type = assertion.Type?.Trim().ToLowerInvariant();
+            var expected = assertion.Type?.Trim().Equals("output_matches", StringComparison.OrdinalIgnoreCase) == true
+                ? assertion.Pattern ?? "<missing>"
+                : assertion.Value ?? "<missing>";
             var passed = type switch
             {
                 "exit_code" => int.TryParse(assertion.Value, out var expectedExitCode) &&
@@ -474,13 +477,10 @@ public class NtoolsLauncherTestRunner
 
             if (passed)
             {
-                WriteSuccess($"Assertion passed: {assertion.Type}");
+                WriteSuccess($"Assertion passed: {assertion.Type}; expected '{expected}'");
             }
             else
             {
-                var expected = assertion.Type?.Trim().Equals("output_matches", StringComparison.OrdinalIgnoreCase) == true
-                    ? assertion.Pattern ?? "<missing>"
-                    : assertion.Value ?? "<missing>";
                 WriteError($"Assertion failed: {assertion.Type}; expected '{expected}'");
                 allPassed = false;
             }

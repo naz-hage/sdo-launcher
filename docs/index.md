@@ -1,4 +1,4 @@
-## ntools-launcher
+## sdo-launcher
 
 A NuGet package library for launching executables, downloading files, executing shell commands, and checking process elevation.
 

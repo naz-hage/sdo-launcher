@@ -1,15 +1,15 @@
 <?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
-    <id>ntools-launcher</id>
+    <id>sdo-launcher</id>
     <version>0.0.0.0</version>
     <title>A wrapper for Process .NET class</title>
     <authors>naz-hage</authors>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <license type="file">LICENSE.txt</license>
     <projectUrl>https://github.com/naz-hage/sdo-launcher/blob/main/README.md</projectUrl>
-    <description>ntools-launcher has migrated to sdo-launcher. Install the sdo-launcher package for the current library. This versatile library simplifies tasks like launching executables, downloading files, executing shell commands, and checking process elevation.</description>
-    <releaseNotes>ntools-launcher has migrated to sdo-launcher. Update package references from ntools-launcher to sdo-launcher and use the sdo-launcher repository for current source and documentation.</releaseNotes>
+    <description>sdo-launcher has migrated to sdo-launcher. Install the sdo-launcher package for the current library. This versatile library simplifies tasks like launching executables, downloading files, executing shell commands, and checking process elevation.</description>
+    <releaseNotes>sdo-launcher has migrated to sdo-launcher. Update package references from sdo-launcher to sdo-launcher and use the sdo-launcher repository for current source and documentation.</releaseNotes>
     <copyright>2020-2026</copyright>
     <readme>README.md</readme>
     <tags></tags>

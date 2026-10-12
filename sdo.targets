@@ -76,15 +76,15 @@
 	<!-- Pack a Nuget package -->
 	<Target Name="NUGET_PACK" DependsOnTargets="NUGET_DEP">
 		<Exec Command='"$(NugetExe)" pack "$(SolutionDir)\launcher\sdo-launcher.nuspec" -Version $(ProductVersion) -OutputDirectory "$(NugetPackagePath)"'/>
-        <Exec Command='if exist "$(LocalNugetFeed)\ntools-launcher\$(ProductVersion)" rd "$(LocalNugetFeed)\ntools-launcher\$(ProductVersion)" /s /q'/>
+        <Exec Command='if exist "$(LocalNugetFeed)\sdo-launcher\$(ProductVersion)" rd "$(LocalNugetFeed)\sdo-launcher\$(ProductVersion)" /s /q'/>
 
 		<Message Text="==> DONE"/>
 		</Target>
 
 	<!-- Pack and Add Nuget package to local feed after a stage build -->
 	<Target Name="NUGET_ADD" DependsOnTargets="AUTOTAG_STAGE;SOLUTION;NUGET_DEP;NUGET_PACK" AfterTargets="STAGE">
-		<Exec Command='if exist "$(LocalNugetFeed)\ntools-launcher\$(ProductVersion)" rd "$(LocalNugetFeed)\ntools-launcher\$(ProductVersion)" /s /q'/>
-		<Exec Command='"$(NugetExe)" add "$(NugetPackagePath)\ntools-launcher.$(ProductVersion).nupkg" -Source "$(LocalNugetFeed)"'/>
+		<Exec Command='if exist "$(LocalNugetFeed)\sdo-launcher\$(ProductVersion)" rd "$(LocalNugetFeed)\sdo-launcher\$(ProductVersion)" /s /q'/>
+		<Exec Command='"$(NugetExe)" add "$(NugetPackagePath)\sdo-launcher.$(ProductVersion).nupkg" -Source "$(LocalNugetFeed)"'/>
 
 		<Message Text="==> DONE"/>
 	</Target>
@@ -95,7 +95,7 @@
 			<NugetApiKey>$(NugetApiKey)</NugetApiKey>
 		</PropertyGroup>
 		<Message Text="Publishing Nuget package with version $(ProductVersion)" />
-		<Exec Command='"$(NugetExe)" push "$(NugetPackagePath)\ntools-launcher.$(ProductVersion).nupkg" -Source https://api.nuget.org/v3/index.json -ApiKey $(NugetApiKey)'/>
+		<Exec Command='"$(NugetExe)" push "$(NugetPackagePath)\sdo-launcher.$(ProductVersion).nupkg" -Source https://api.nuget.org/v3/index.json -ApiKey $(NugetApiKey)'/>
 		<Message Text="==> DONE"/>	
 	</Target>
 

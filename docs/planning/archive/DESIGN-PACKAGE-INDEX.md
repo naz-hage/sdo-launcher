@@ -73,7 +73,7 @@
 **Purpose:** Concrete examples for all three use cases
 - test-framework scenario migration (SDO multi-step workflow)
 - sdo deployment with verification
-- ntools-launcher complex orchestration
+- sdo-launcher complex orchestration
 - Parallel testing (multi-framework test matrix)
 - Cross-repository coordination
 - Schema capability comparison table
@@ -92,7 +92,7 @@
 - Backward compatibility strategy (3 levels)
 - Core design decisions (5 decisions)
 - Key features & capabilities matrix
-- test-framework/sdo/ntools-launcher compatibility
+- test-framework/sdo/sdo-launcher compatibility
 - 7 assertion types
 - Timeline and deliverables
 - Risk mitigation
@@ -145,8 +145,8 @@
 2. Reference: [test-framework-integration.md](test-framework-integration.md) - Assertions/extraction
 3. Schema: [yaml-schema-reference.md](yaml-schema-reference.md) - Complete reference
 
-### For ntools-launcher Team
-1. Start: [integration-examples.md](integration-examples.md#example-3-ntools-launcher-process-orchestration) - ntools example
+### For sdo-launcher Team
+1. Start: [integration-examples.md](integration-examples.md#example-3-sdo-launcher-process-orchestration) - ntools example
 2. Reference: [yaml-schema-reference.md](yaml-schema-reference.md) - YAML format
 3. API: [yaml-launcher-design.md](yaml-launcher-design.md) - Core API design
 
@@ -245,13 +245,13 @@ Level 4: Variable Extraction & Passing (new)
 ## ✅ Design Completeness Checklist
 
 ### Requirements Met ✅
-- Unifies test-framework, sdo, ntools-launcher patterns
+- Unifies test-framework, sdo, sdo-launcher patterns
 - Maintains 100% backward compatibility
 - Supports output assertions (test-framework pattern)
 - Supports variable extraction (test-framework pattern)
 - Supports variable passing (test-framework pattern)
 - Supports return code validation (sdo pattern)
-- Supports digital signatures (ntools-launcher pattern)
+- Supports digital signatures (sdo-launcher pattern)
 - Supports sequential pipelines
 - Supports parallel execution
 
@@ -295,7 +295,7 @@ Level 4: Variable Extraction & Passing (new)
 Before (3 separate approaches):
   - test-framework: assertions + extraction
   - sdo: return codes + JSON
-  - ntools-launcher: signatures + orchestration
+  - sdo-launcher: signatures + orchestration
 
 After (1 unified approach):
   - YAML Launcher: all of the above + more
@@ -343,7 +343,7 @@ After (1 unified approach):
 ### External References
 - test-framework docs: `../../test-framework/docs/METADATA_DRIVEN_TESTING.md`
 - sdo docs: `../../ntools/docs/nbuild.md`
-- ntools-launcher: `../launcher/Launcher.cs`
+- sdo-launcher: `../launcher/Launcher.cs`
 
 ---
 
@@ -392,7 +392,7 @@ After (1 unified approach):
 ## ✨ Design Highlights
 
 ### Innovation
-- 🎯 **Unified Framework:** First unified language for test-framework, sdo, ntools-launcher
+- 🎯 **Unified Framework:** First unified language for test-framework, sdo, sdo-launcher
 - 📊 **Declarative:** Complex deployments described in YAML, not code
 - 🔄 **Variable Flow:** Automatic variable extraction and passing between steps
 - ⚡ **Parallel Ready:** Foundation for concurrent execution
@@ -400,7 +400,7 @@ After (1 unified approach):
 ### Proven Patterns
 - ✅ Based on test-framework's battle-tested patterns
 - ✅ Aligns with sdo's JSON manifest approach
-- ✅ Respects ntools-launcher's signature verification
+- ✅ Respects sdo-launcher's signature verification
 - ✅ Uses industry-standard YAML format
 
 ### Backward Compatibility
@@ -416,7 +416,7 @@ After (1 unified approach):
 - 3 separate execution models across 3 repos
 - Duplicated logic for assertions, error handling, result passing
 - No unified way to orchestrate cross-repository workflows
-- test-framework capabilities not available in sdo or ntools-launcher
+- test-framework capabilities not available in sdo or sdo-launcher
 
 ### After (With YAML Launcher)
 - 1 unified execution model across all repos

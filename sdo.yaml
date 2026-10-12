@@ -1,12 +1,12 @@
 version: "1.0"
-description: "Build the ntools-launcher"
+description: "Build the sdo-launcher"
 variables:
   ArtifactDirectory: "C:\\Artifacts"
   Target: "Release"
   BuildType: "stage"
   Verbosity: "minimal"
   ReleaseDir: "C:\\Release"
-  Project: "ntools-launcher"
+  Project: "sdo-launcher"
 execution:
     verbose: true
     stopOnFirstError: true
@@ -57,7 +57,7 @@ steps:
     arguments: >-
       -NoProfile -Command
       "$version = (Get-Content '.\\.temp\\.tag').Trim();
-      $output = Join-Path '$(ArtifactDirectory)' ('ntools-launcher\\$(Target)\\' + $version);
+      $output = Join-Path '$(ArtifactDirectory)' ('sdo-launcher\\$(Target)\\' + $version);
       dotnet publish `
         '.\\launcher\\Launcher.csproj' `
         -c '$(Target)' `

@@ -155,8 +155,8 @@ before executing the steps sequentially, returning the same aggregated
 ## File Structure
 
 ```
-ntools-launcher/
-├── ntools-launcher.sln           # Main solution file
+sdo-launcher/
+├── sdo-launcher.sln           # Main solution file
 ├── mkdocs.yml                    # Documentation configuration
 ├── README.md                     # Project documentation
 ├── targets.md                    # Build targets documentation
@@ -279,14 +279,14 @@ ntools-launcher/
 - Test execution with coverage reporting
 
 ### Distribution
-- **NuGet Package**: `ntools-launcher` on nuget.org
+- **NuGet Package**: `sdo-launcher` on nuget.org
 - **GitHub Releases**: Source code and documentation
 - **Documentation Site**: MkDocs-generated static site
 
 ## YAML Launcher Framework Architecture
 
 ### Overview
-The YAML Launcher Framework extends ntools-launcher with a declarative configuration system for orchestrating complex executable execution workflows without ceremony-heavy Process setup code.
+The YAML Launcher Framework extends sdo-launcher with a declarative configuration system for orchestrating complex executable execution workflows without ceremony-heavy Process setup code.
 
 ### Model Classes (YamlLauncher.Models namespace)
 
@@ -428,4 +428,4 @@ apps:       # sdo/ntools compatibility
 - Async operation improvements
 - Memory usage optimization
 - Concurrent download support</content>
-<parameter name="filePath">c:\source\ntools-launcher\docs\architecture.md
+<parameter name="filePath">c:\source\sdo-launcher\docs\architecture.md

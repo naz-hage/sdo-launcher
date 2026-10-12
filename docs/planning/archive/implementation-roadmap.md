@@ -2,14 +2,14 @@
 
 **Date:** September 13, 2026  
 **Status:** Phase 1 foundation implemented; orchestration phases remain planned  
-**Audience:** ntools-launcher Development Team
+**Audience:** sdo-launcher Development Team
 
 ---
 
 ## Design Summary
 
 Created a unified YAML-based executable launcher framework that:
-- Eliminates Process boilerplate code across test-framework, sdoooo, and ntools-launcher
+- Eliminates Process boilerplate code across test-framework, sdoooo, and sdo-launcher
 - Supports single executable and multi-task pipelines (sequential and parallel)
 - Includes digital signature verification and timeout management
 - Enables variable substitution for cross-environment portability

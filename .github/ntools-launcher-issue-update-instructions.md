@@ -46,7 +46,7 @@ The skill will:
 
 ## File Location
 
-All issue files must be in: `c:\source\ntools-launcher\.temp\`
+All issue files must be in: `c:\source\sdo-launcher\.temp\`
 
 Naming pattern: `<number>-issue.md` (e.g., `35-issue.md`, `36-issue.md`)
 
