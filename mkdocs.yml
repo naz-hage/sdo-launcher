@@ -53,5 +53,3 @@ nav:
   - Planning:
     - Overview: planning/README.md
     - Implementation Status: planning/implementation-status.md
-  - Revisions:
-    - Changelog: revisions/changelog.md

@@ -72,8 +72,11 @@ catch (Exception ex)
 ```
 `DownloadAsync` uses the configured `HttpClient` certificate validation callback;
 an HTTP status such as 404 is returned as a download failure and is not treated
-as a certificate error. VirusTotal scanning is not automatic; use
-`VirusTotalChecker` explicitly when that integration is required.
+as a certificate error. Requests identify themselves with the `sdo/1.0` user
+agent for compatibility with CDN-protected download endpoints. HTTP failures
+include the response status when available, such as `HTTP 403 (Forbidden)`.
+VirusTotal scanning is not automatic; use `VirusTotalChecker` explicitly when
+that integration is required.
 
 ### ShellUtility Class
 

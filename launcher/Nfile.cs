@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using System.Net.Security;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Launcher.Services;
 
@@ -32,6 +33,7 @@ namespace Ntools
         /// The timeout value for HTTP requests in milliseconds.
         /// </summary>
         private static int Timeout { get; set; } = 300000;  // 300000 = 5 minutes 
+        private const string UserAgent = "sdo";
 
         /// <summary>
         /// The list of allowed file extensions.
@@ -62,6 +64,7 @@ namespace Ntools
 
             HttpClient = new HttpClient(HttpMessageHandler);
             HttpClient.Timeout = TimeSpan.FromMilliseconds(Timeout);
+            HttpClient.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue(UserAgent, "1.0"));
         }
 
         /// <summary>
@@ -143,7 +146,10 @@ namespace Ntools
                 }
                 catch (HttpRequestException ex)
                 {
-                    resultDownload.Fail($"An exception occurred in download try # {retryCount}: {ex.Message}");
+                    var status = ex.StatusCode.HasValue
+                        ? $" HTTP {(int)ex.StatusCode.Value} ({ex.StatusCode.Value})."
+                        : string.Empty;
+                    resultDownload.Fail($"Download request failed on try # {retryCount}.{status} {ex.Message}");
                 }
                 catch (Exception ex)
                 {
