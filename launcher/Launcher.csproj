@@ -6,18 +6,17 @@
     <AssemblyVersion></AssemblyVersion>
     <PackageId>sdo-launcher</PackageId>
     <PackageTitle>sdo-launcher</PackageTitle>
-    <PackageDescription>A wrapper for Process .NET class</PackageDescription>
+    <PackageDescription>ntools-launcher has migrated to sdo-launcher. Install the sdo-launcher package for the current library. This versatile library simplifies tasks like launching executables, downloading files, executing shell commands, and checking process elevation.</PackageDescription>
     <PackageProjectUrl>https://github.com/naz-hage/sdo-launcher</PackageProjectUrl>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <Authors>naz-hage</Authors>
     <Company>naz-hage</Company>
-    <Product>Ntools</Product>
+    <Product>sdo-launcher</Product>
     <Description>A wrapper for Process .NET class</Description>
     <Copyright>2020-2026</Copyright>
   </PropertyGroup>
-
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <OutputPath>$(solutionDir)/Debug</OutputPath>
@@ -46,10 +45,12 @@
     <SatelliteResourceLanguages>none</SatelliteResourceLanguages>
   </PropertyGroup>
 
-
-
   <ItemGroup>
     <None Include="..\LICENSE.txt">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\README.md">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
@@ -59,13 +60,5 @@
     <PackageReference Include="System.Security.Cryptography.Pkcs" Version="10.0.13" />
     <PackageReference Include="YamlDotNet" Version="18.1.0" />
   </ItemGroup>
-
-  <ItemGroup>
-    <None Include="..\README.md">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
-  </ItemGroup>
-
 
 </Project>
