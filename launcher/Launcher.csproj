@@ -4,6 +4,13 @@
     <TargetFramework>net10.0</TargetFramework>
     <Version></Version>
     <AssemblyVersion></AssemblyVersion>
+    <PackageId>sdo-launcher</PackageId>
+    <PackageTitle>sdo-launcher</PackageTitle>
+    <PackageDescription>A wrapper for Process .NET class</PackageDescription>
+    <PackageProjectUrl>https://github.com/naz-hage/sdo-launcher</PackageProjectUrl>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <Authors>naz-hage</Authors>
     <Company>naz-hage</Company>
     <Product>Ntools</Product>
@@ -54,7 +61,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="README.md">
+    <None Include="..\README.md">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>

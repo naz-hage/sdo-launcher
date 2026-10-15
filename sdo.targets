@@ -75,7 +75,7 @@
 
 	<!-- Pack a Nuget package -->
 	<Target Name="NUGET_PACK" DependsOnTargets="NUGET_DEP">
-		<Exec Command='"$(NugetExe)" pack "$(SolutionDir)\launcher\sdo-launcher.nuspec" -Version $(ProductVersion) -OutputDirectory "$(NugetPackagePath)"'/>
+		<Exec Command='"dotnet" pack "$(SolutionDir)\launcher\Launcher.csproj" --configuration "$(TargetRelease)" --output "$(NugetPackagePath)" --no-restore --no-build -p:PackageVersion=$(ProductVersion)'/>
         <Exec Command='if exist "$(LocalNugetFeed)\sdo-launcher\$(ProductVersion)" rd "$(LocalNugetFeed)\sdo-launcher\$(ProductVersion)" /s /q'/>
 
 		<Message Text="==> DONE"/>
