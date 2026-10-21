@@ -14,6 +14,7 @@ Used by [ntools](https://github.com/naz-hage/sdo) repo:
 - **NFile** - Download files with integrity, signature, and VirusTotal checks
 - **ShellUtility** - Execute shell commands and resolve file paths
 - **CurrentProcess** - Check process elevation status
+- **BoxBuilder** - Build aligned text tables from headers and rows
 - **ResultHelper** - Handle process execution results
 - **ResultDownload** - Handle download operation results
 - **YAML Launcher Framework** - YAML parsing, validation, and single-step process execution with output capture, timeouts, environment variables, and optional signature checks

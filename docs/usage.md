@@ -100,6 +100,20 @@ var isElevated = CurrentProcess.IsElevated();
 Console.WriteLine(isElevated);
 ```
 
+### BoxBuilder Class
+
+The `BoxBuilder` class creates a text table from column headers and rows.
+
+```csharp
+using Launcher.Services;
+
+var box = new BoxBuilder("Metric", "Count");
+box.AddRow("Copied", "12");
+box.AddRow("Failed", "0");
+
+Console.WriteLine(box.Build());
+```
+
 ### ConsoleHelper Class
 
 The `ConsoleHelper` class provides consistent colored output for launcher

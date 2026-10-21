@@ -1,9 +1,8 @@
-using System;
-using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using YamlLauncher.Models;
+using System.Collections.Generic;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
+using YamlLauncher.Models;
 
 namespace LauncherTests.YamlLauncher.Models;
 
@@ -52,7 +51,7 @@ steps:
         Assert.IsNotNull(config.Execution);
         Assert.AreEqual(ExecutionMode.Sequential, config.Execution.Mode);
         Assert.IsTrue(config.Execution.Verbose);
-        Assert.AreEqual(2, config.Steps!.Count);
+        Assert.HasCount(2, config.Steps);
         Assert.AreEqual("step1", config.Steps[0].Name);
         Assert.AreEqual("step2", config.Steps[1].Name);
     }
@@ -76,9 +75,9 @@ tasks:
 
         // Assert
         Assert.IsNotNull(config);
-        Assert.AreEqual(1, config.Steps!.Count);
+        Assert.HasCount(1, config.Steps);
         Assert.AreEqual("task1", config.Steps[0].Name);
-        Assert.AreEqual(config.Tasks, config.Steps);
+        Assert.AreSequenceEqual(config.Tasks, config.Steps);
     }
 
     [TestMethod]
@@ -100,9 +99,9 @@ apps:
 
         // Assert
         Assert.IsNotNull(config);
-        Assert.AreEqual(1, config.Steps!.Count);
+        Assert.HasCount(1, config.Steps);
         Assert.AreEqual("app1", config.Steps[0].Name);
-        Assert.AreEqual(config.Apps, config.Steps);
+        Assert.AreSequenceEqual(config.Apps, config.Steps);
     }
 
     [TestMethod]
@@ -135,8 +134,8 @@ extractVariables:
         // Assert
         Assert.IsNotNull(step);
         Assert.AreEqual("test-step", step.Name);
-        Assert.AreEqual(2, step.Assertions!.Count);
-        Assert.AreEqual(1, step.ExtractVariables!.Count);
+        Assert.HasCount(2, step.Assertions);
+        Assert.HasCount(1, step.ExtractVariables);
         Assert.AreEqual("version", step.ExtractVariables[0].Name);
     }
 
@@ -188,12 +187,12 @@ steps:
         Assert.IsNotNull(config);
         Assert.AreEqual("2.0", config.Version);
         Assert.AreEqual(ExecutionMode.Parallel, config.Execution!.Mode);
-        Assert.AreEqual(3, config.Steps!.Count);
+        Assert.HasCount(3, config.Steps);
         Assert.AreEqual("validate", config.Steps[0].Name);
         Assert.AreEqual("build", config.Steps[1].Name);
         Assert.AreEqual("deploy", config.Steps[2].Name);
-        Assert.AreEqual(1, config.Steps[1].Dependencies!.Count);
-        Assert.AreEqual(1, config.Steps[1].ExtractVariables!.Count);
+        Assert.HasCount(1, config.Steps[1].Dependencies);
+        Assert.HasCount(1, config.Steps[1].ExtractVariables);
     }
 
     [TestMethod]
@@ -203,16 +202,15 @@ steps:
         var result = new LaunchResult
         {
             Success = true,
-            Results = new List<ExecutionResult>
-            {
-                new ExecutionResult
-                {
+            Results =
+            [
+                new() {
                     Name = "step1",
                     Success = true,
                     ExitCode = 0,
                     StandardOutput = "Success"
                 }
-            },
+            ],
             ExtractedVariables = new Dictionary<string, string>
             {
                 { "version", "1.0.0" }
@@ -227,9 +225,9 @@ steps:
 
         // Assert
         Assert.IsNotNull(yaml);
-        Assert.IsTrue(yaml.Contains("success"));
-        Assert.IsTrue(yaml.Contains("step1"));
-        Assert.IsTrue(yaml.Contains("1.0.0"));
+        Assert.Contains("success", yaml);
+        Assert.Contains("step1", yaml);
+        Assert.Contains("1.0.0", yaml);
     }
 
     [TestMethod]

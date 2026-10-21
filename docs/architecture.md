@@ -162,8 +162,6 @@ sdo-launcher/
 ├── targets.md                    # Build targets documentation
 ├── coverage.cobertura.xml        # Test coverage report
 ├── sdo.targets                # MSBuild targets
-├── unit-tests.targets            # Unit test targets
-├── e2e-tests.targets             # E2E test targets
 │
 ├── launcher/                     # Main library project
 │   ├── Launcher.csproj
@@ -175,6 +173,11 @@ sdo-launcher/
 │   ├── ResultDownload.cs         # Download result handling
 │   ├── SignatureVerifier.cs      # Digital signature verification
 │   ├── VirusTotalChecker.cs      # VirusTotal integration
+│   │
+│   ├── Services/                 # Shared services and helpers
+│   │   ├── BoxBuilder.cs         # Text table formatting
+│   │   ├── ConsoleHelper.cs      # Colored console output
+│   │   └── Nversion.cs          # Assembly version information
 │   │
 │   └── YamlLauncher/             # YAML Launcher framework
 │       └── Models/               # Configuration and result models

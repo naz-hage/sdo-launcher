@@ -1,11 +1,11 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Ntools;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace Ntools.Tests
+namespace launcherTests
 {
     [TestClass()]
     [DoNotParallelize]
@@ -18,8 +18,8 @@ namespace Ntools.Tests
             Uri webDownloadFile = new("https://dist.nuget.org/win-x86-commandline/latest/nuget.exe");
             string downloadedFile = "nuget.exe";
 
-            Nfile.SetTrustedHosts(new List<string> { "dist.nuget.org" });
-            Nfile.SetAllowedExtensions(new List<string> { ".exe" });
+            Nfile.SetTrustedHosts(["dist.nuget.org"]);
+            Nfile.SetAllowedExtensions([".exe"]);
 
             // setup file name to download to temp folder because devtools is protected
             downloadedFile = Path.Combine(Path.GetTempPath(), Path.GetFileName(downloadedFile));
@@ -51,10 +51,10 @@ namespace Ntools.Tests
             {
                 {   new("https://desktop.docker.com/win/main/am@d64/Docker%20Desktop%20Installer.exe"),"Docker.Desktop.Installer.exe" }, // Uri not found Result no success
             };
-            Nfile.SetTrustedHosts(new List<string> { "desktop.docker.com" });
-            Nfile.SetAllowedExtensions(new List<string> { ".exe" });
+            Nfile.SetTrustedHosts(["desktop.docker.com"]);
+            Nfile.SetAllowedExtensions([".exe"]);
 
-            
+
 
             foreach (var item in expectedFail)
             {
@@ -87,7 +87,7 @@ namespace Ntools.Tests
                 {   new("http://desktop.docker.com/win/main/amd64/Docker%20Desktop%20Installer.exe"), "Docker.Desktop.Installer.exe" },  // Invalid Uri: exception 
             };
 
-            
+
 
             foreach (var item in expectedFail)
             {
@@ -114,9 +114,9 @@ namespace Ntools.Tests
                 { new("https://dist.nuget.org/win-x86-commandline/latest/nuget.exe"), null },  //Invalid download filename: exception
             };
 
-            
 
-            Nfile.SetTrustedHosts(new List<string> { "desktop.docker.com", "github.com", "dist.nuget.org" });
+
+            Nfile.SetTrustedHosts(["desktop.docker.com", "github.com", "dist.nuget.org"]);
 
             foreach (var item in expectedFail)
             {
@@ -132,16 +132,16 @@ namespace Ntools.Tests
         {
             // Arrange
             string fileName = "c:\\temp\\test.txt";
-            Uri uri = new Uri("https://localhost");
+            Uri uri = new("https://localhost");
 
             // Act
-            ResultDownload resultDownload = new ResultDownload(uri, fileName);
+            ResultDownload resultDownload = new(uri, fileName);
 
             // Assert
             Assert.AreEqual(fileName, resultDownload.FileName);
             Assert.AreEqual(uri, resultDownload.Uri);
         }
-       
+
         [TestMethod]
         public void SetAllowedExtensionsTestAsync()
         {
@@ -152,27 +152,27 @@ namespace Ntools.Tests
             Nfile.SetAllowedExtensions(allowedExtensions);
 
             // Assert
-            Assert.AreEqual(allowedExtensions, Nfile.GetAllowedExtensions());
+            Assert.AreSequenceEqual(allowedExtensions, Nfile.GetAllowedExtensions());
 
         }
 
-       
+
         [TestMethod]
         public async Task SetAllowedExtensionsNullTestAsync()
         {
             // Arrange download file with not allowed extension
-            
+
             Uri webDownloadFile = new("https://dist.nuget.org/win-x86-commandline/latest/nuget.exe");
             string downloadedFile = "nuget.exe";
 
-            Nfile.SetTrustedHosts(new List<string> { "dist.nuget.org" });
+            Nfile.SetTrustedHosts(["dist.nuget.org"]);
             // setup file name to download to temp folder because devtools is protected
             downloadedFile = Path.Combine(Path.GetTempPath(), Path.GetFileName(downloadedFile));
             if (File.Exists(downloadedFile))
             {
                 File.Delete(downloadedFile);
             }
-            Nfile.SetAllowedExtensions(new List<string>());
+            Nfile.SetAllowedExtensions([".exe"]);
 
             // Act
             try
@@ -196,7 +196,7 @@ namespace Ntools.Tests
         public async Task GetFileSizeAsyncTest()
         {
             // Arrange
-            
+
             Uri webDownloadFile = new("https://dist.nuget.org/win-x86-commandline/latest/nuget.exe");
             string downloadedFile = "nuget.exe";
 
@@ -219,7 +219,7 @@ namespace Ntools.Tests
         public async Task UriExistsAsyncTest()
         {
             // Arrange
-            
+
             Uri webDownloadFile = new("https://dist.nuget.org/win-x86-commandline/latest/nuget.exe");
             string downloadedFile = "nuget.exe";
 
@@ -242,12 +242,12 @@ namespace Ntools.Tests
         public async Task DownloadAsyncUriNotFoundTest()
         {
             // Arrange
-            
+
             Uri webDownloadFile = new("https://dist.nuget.org/win-x86-commandline-notFound/latest/nuget.exe");
             string downloadedFile = "nuget.exe";
 
-            Nfile.SetTrustedHosts(new List<string> { "dist.nuget.org" });
-            Nfile.SetAllowedExtensions(new List<string> { ".exe" });
+            Nfile.SetTrustedHosts(["dist.nuget.org"]);
+            Nfile.SetAllowedExtensions([".exe"]);
 
             // setup file name to download to temp folder because devtools is protected
             downloadedFile = Path.Combine(Path.GetTempPath(), Path.GetFileName(downloadedFile));
