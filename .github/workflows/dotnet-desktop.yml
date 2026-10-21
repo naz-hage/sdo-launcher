@@ -16,7 +16,7 @@ on:
 env:
   Sdo: sdo
   build_type: ${{ github.ref == 'refs/heads/main' && 'prod' || github.event.inputs.build_type || 'stage' }}
-  SdoVersion: "1.82.0"
+  SdoVersion: "2.2.0"
   Enable_Logging: true # Enable additional logging
 
 jobs:
