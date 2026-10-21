@@ -1,6 +1,5 @@
 param(
-    [string]$SdoVersion = "2.2.0",  # default version of SDO to install
-    [switch]$installMongoDB  # Add this switch to control whether MongoDB should be installed
+    [string]$SdoVersion = "2.2.0"  # default version of SDO to install
 )
 # Get the shared SDO setup module and import it
 #########################
@@ -25,7 +24,7 @@ if (-NOT ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdent
 # install SDO
 #########################
 Write-OutputMessage $fileName "Installing SDO..."
-$result = Install-Sdo -Version $nToolsVersion
+$result = Install-Sdo -Version $SdoVersion
 if (-not $result) {
     Write-Host "Failed to install SDO. Please check the logs for more details." -ForegroundColor Red
     exit 1
