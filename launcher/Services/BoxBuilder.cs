@@ -23,10 +23,6 @@ namespace Launcher.Services
         private readonly List<(string[] Columns, ConsoleColor? Color)> _rows = new();
         private readonly string[] _headers;
 
-        public BoxBuilder(params string[] headers)
-        {
-            _headers = headers;
-        }
 
         /// <summary>
         /// Adds a row without specifying a color.
