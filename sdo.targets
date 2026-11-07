@@ -17,54 +17,6 @@
 		<DeploymentFolder>$(LocalNugetFeed)</DeploymentFolder>
 	</PropertyGroup>
 	
-	<!-- Define current solution folder -->
-	<Target Name="CURRENT_DIRECTORY" >
-
-		<PropertyGroup>
-			<CurrentDirectory>$(MSBuildProjectDirectory)</CurrentDirectory>
-		</PropertyGroup>
-		
-		<PropertyGroup>
-			<DirectoryName>$([System.IO.Path]::GetFileNameWithoutExtension('$(MSBuildProjectDirectory)'))</DirectoryName>
-		</PropertyGroup>
-		<Message Text="Directory Name: $(DirectoryName)"/>
-	</Target>
-
-	<!--Setup the ARTIFACTS folders for binaries and test results - override -->
-    <Target Name="ARTIFACTS" DependsOnTargets="TAG">
-      <PropertyGroup>
-        <ArtifactsFolder>$(ArtifactsDir)\$(SolutionName)\$(TargetRelease)\$(ProductVersion)</ArtifactsFolder>
-		<ArtifactsTestResultsFolder>$(ArtifactsDir)\$(SolutionName)\TestResults\$(ProductVersion)</ArtifactsTestResultsFolder>
-      </PropertyGroup>  
-      <ItemGroup>
-            <BinaryFiles 
-						Exclude="
-       $(SolutionDir)\$(TargetRelease)\**\*.pdb;
-       $(SolutionDir)\$(TargetRelease)\test.*;
-       $(SolutionDir)\$(TargetRelease)\*test*;
-       $(SolutionDir)\$(TargetRelease)\Nuget*;
-       $(SolutionDir)\$(TargetRelease)\*CodeCoverage*"
-
-						Include="
-                        $(SolutionDir)\$(TargetRelease)\*.exe;
-                        $(SolutionDir)\$(TargetRelease)\*.exe.config;
-                        $(SolutionDir)\$(TargetRelease)\*.json;
-						$(SolutionDir)\sdo\resources\*.targets;
-						$(SolutionDir)\sdo\resources\*.ps1;
-                        $(SolutionDir)\$(TargetRelease)\*.dll"
-						/>
-
-            <RunTimesNetStandard20 Include = "
-           $(SolutionDir)\$(TargetRelease)\netstandard2.0\*.*"
-                                    Exclude="
-                  $(SolutionDir)\$(TargetRelease)\**\*.pdb"
-                  />
-    
-        </ItemGroup>
-		
-        <Message Text="==> DONE"/>
-    </Target>
-
 	<!-- Define Nuget Package dependencies -->
 	<Target Name="NUGET_DEP" DependsOnTargets="TAG">
 	<PropertyGroup>
@@ -84,7 +36,7 @@
 	<!-- Pack and Add Nuget package to local feed after a stage build -->
 	<Target Name="NUGET_ADD" DependsOnTargets="AUTOTAG_STAGE;SOLUTION;NUGET_DEP;NUGET_PACK" AfterTargets="STAGE">
 		<Exec Command='if exist "$(LocalNugetFeed)\sdo-launcher\$(ProductVersion)" rd "$(LocalNugetFeed)\sdo-launcher\$(ProductVersion)" /s /q'/>
-		<Exec Command='"$(NugetExe)" add "$(NugetPackagePath)\sdo-launcher.$(ProductVersion).nupkg" -Source "$(LocalNugetFeed)"'/>
+		<Exec Command='"dotnet" nuget push "$(NugetPackagePath)\sdo-launcher.$(ProductVersion).nupkg" --source "$(LocalNugetFeed)" --skip-duplicate'/>
 
 		<Message Text="==> DONE"/>
 	</Target>
@@ -95,7 +47,7 @@
 			<NugetApiKey>$(NugetApiKey)</NugetApiKey>
 		</PropertyGroup>
 		<Message Text="Publishing Nuget package with version $(ProductVersion)" />
-		<Exec Command='"$(NugetExe)" push "$(NugetPackagePath)\sdo-launcher.$(ProductVersion).nupkg" -Source https://api.nuget.org/v3/index.json -ApiKey $(NugetApiKey)'/>
+		<Exec Command='"dotnet" nuget push "$(NugetPackagePath)\sdo-launcher.$(ProductVersion).nupkg" --source https://api.nuget.org/v3/index.json --api-key "$(NugetApiKey)"'/>
 		<Message Text="==> DONE"/>	
 	</Target>
 
@@ -110,7 +62,6 @@
   <!-- Create a production Nuget package and release - override -->
   <Target Name="PROD" DependsOnTargets="
                 CLEAN;
-                GIT_PULL;
                 TAG;
                 AUTOTAG_PROD;
                 SOLUTION;

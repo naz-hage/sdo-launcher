@@ -44,14 +44,6 @@ steps:
     arguments: "solution"
     workingDirectory: .
     expectedReturnCode: 0
-  # TEST;
-  # - name: test solution
-  #   path: sdo
-  #   arguments: "test"
-  #   workingDirectory: .
-  #   expectedReturnCode: 0
-  # COPY_ARTIFACTS;
-  # PUBLISH;
   - name: publish sdo
     path: pwsh.exe
     arguments: >-

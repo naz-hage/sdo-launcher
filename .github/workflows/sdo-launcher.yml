@@ -1,0 +1,127 @@
+name: .NET Core Desktop
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "*" ]
+  workflow_dispatch:
+    inputs:
+      build_type:
+        description: 'Build Type (stage or prod)'
+        required: false
+        default: 'stage'
+  workflow_call:
+
+env:
+  Sdo: sdo
+  build_type: ${{ github.ref == 'refs/heads/main' && 'prod' || github.event.inputs.build_type || 'stage' }}
+  Enable_Logging: true # Enable additional logging
+
+jobs:
+  build:
+    name: Build and Test
+    strategy:
+      matrix:
+        configuration: [Debug]
+    runs-on: windows-latest
+
+    steps:
+    - name: Check Build Type | must be stage or prod
+      run: |
+        if ($env:build_type -ne "stage" -and $env:build_type -ne "prod") {
+          Write-Output "Invalid build type: $env:build_type"
+          exit 1
+        }
+      shell: pwsh
+
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.API_GITHUB_KEY }}
+        fetch-depth: 0
+        ref: ${{ github.event.pull_request.head.ref }}
+        repository: ${{ github.event.pull_request.head.repo.full_name }}
+
+
+    - name: Install .NET Core
+      run: |
+        # Install .NET 10 using the official install script
+        Invoke-WebRequest -Uri 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1'
+        .\dotnet-install.ps1 -Version 10.0.100 -InstallDir 'C:\Program Files\dotnet'
+        echo 'C:\Program Files\dotnet' | Out-File -FilePath $env:GITHUB_PATH -Append
+      shell: pwsh
+
+    - name: Set DOTNET_ROOT
+      run: |
+        $dotnetPath = (Get-Command dotnet).Source | Split-Path -Parent
+        echo "DOTNET_ROOT=$dotnetPath" >> $env:GITHUB_ENV
+      shell: pwsh
+
+    - name: Add .NET SDK to PATH
+      run: |
+        $dotnetPath = (Get-Command dotnet).Source | Split-Path -Parent
+        echo "$dotnetPath" | Out-File -FilePath $env:GITHUB_PATH -Append
+      shell: pwsh
+
+    - name: Install Sdo
+      run: |
+        cd ./dev-setup
+        ./install.ps1
+      shell: pwsh
+      working-directory: ${{ github.workspace }}
+
+    - name: Set ProgramFiles and Sdo Paths
+      run: |
+        Get-Content -Path $env:GITHUB_PATH
+        $programFilesPath = [System.Environment]::GetFolderPath('ProgramFiles')
+        echo "ProgramFilesPath=$programFilesPath" | Out-File -FilePath $env:GITHUB_ENV -Append
+        echo "$programFilesPath\${{ env.Sdo }}" | Out-File -FilePath $env:GITHUB_PATH -Append
+        Get-Content -Path $env:GITHUB_PATH
+      shell: pwsh
+      working-directory: ${{ github.workspace }}
+
+    - name: Display PATH environment variable
+      run: |
+        Get-Content -Path $env:GITHUB_PATH
+        $env:PATH -split ';' | ForEach-Object { "PATH: $_" }
+      shell: pwsh
+      working-directory: ${{ github.workspace }}
+
+    - name: Configure Git
+      run: |
+        git config --global user.name "github-actions"
+        git config --global user.email "actions@github.com"
+
+    - name: Run build using Sdo
+      run: |
+        & "$env:ProgramFilesPath/${{ env.Sdo }}/${{ env.Sdo }}.exe" ${{ env.build_type }} ${{ env.Enable_Logging == 'true' && '--verbose' || '' }}
+      shell: pwsh
+      working-directory: ${{ github.workspace }}
+      env:
+        OWNER: ${{ github.repository_owner }}
+        API_GITHUB_KEY: ${{ secrets.API_GITHUB_KEY }}
+        NugetApiKey: ${{ secrets.NUGETAPIKEY }}
+        VTAPIKEY: ${{ secrets.VTAPIKEY }}
+        DOTNET_CLI_TELEMETRY_OPTOUT: 1
+
+  docs:
+    name: Publish docs  # More descriptive name for the docs job
+    runs-on: ubuntu-latest
+    needs: [build]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies  
+        run: |  
+          python -m pip install --upgrade pip  
+          pip install -r docs-requirements.txt  
+      - name: Update docs  
+        run: |  
+          mkdocs build  
+          mkdocs gh-deploy --force
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
