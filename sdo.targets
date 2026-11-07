@@ -58,19 +58,4 @@
 		<Exec Command='python -m mkdocs serve' WorkingDirectory="$(SolutionDir)"/>
      <Message Text="==> DONE"/>
 	</Target>
-
-  <!-- Create a production Nuget package and release - override -->
-  <Target Name="PROD" DependsOnTargets="
-                CLEAN;
-                TAG;
-                AUTOTAG_PROD;
-                SOLUTION;
-				TEST;
-                PACKAGE">
-  </Target>
-
-  <!-- Build the solution alias solution target -->
-  <Target Name="BUILD" >
-	<CallTarget Targets="solution" />
-  </Target>
 </Project>
