@@ -29,3 +29,4 @@ if (-not $result) {
 
 Write-OutputMessage $fileName "Completed installation script."
 Write-OutputMessage $fileName "EmtpyLine"
+exit 0
