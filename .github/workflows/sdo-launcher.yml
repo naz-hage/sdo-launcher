@@ -21,6 +21,9 @@ env:
 jobs:
   build:
     name: Build and Test
+    permissions:
+      id-token: write
+      contents: read
     strategy:
       matrix:
         configuration: [Debug]
@@ -93,6 +96,12 @@ jobs:
         git config --global user.name "github-actions"
         git config --global user.email "actions@github.com"
 
+    - name: NuGet login
+      uses: NuGet/login@v1
+      id: nuget-login
+      with:
+        user: ${{ secrets.NUGET_USER }}
+
     - name: Run build using Sdo
       run: |
         & "$env:ProgramFilesPath/${{ env.Sdo }}/${{ env.Sdo }}.exe" ${{ env.build_type }} ${{ env.Enable_Logging == 'true' && '--verbose' || '' }}
@@ -101,7 +110,7 @@ jobs:
       env:
         OWNER: ${{ github.repository_owner }}
         API_GITHUB_KEY: ${{ secrets.API_GITHUB_KEY }}
-        NugetApiKey: ${{ secrets.NUGETAPIKEY }}
+        NugetApiKey: ${{ steps.nuget-login.outputs.NUGET_API_KEY }}
         VTAPIKEY: ${{ secrets.VTAPIKEY }}
         DOTNET_CLI_TELEMETRY_OPTOUT: 1
 
