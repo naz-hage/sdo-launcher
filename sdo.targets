@@ -51,6 +51,12 @@
 		<Message Text="==> DONE"/>	
 	</Target>
 
+	<!-- Verify the published launcher library is available before packaging. -->
+	<Target Name="SMOKE_TEST" DependsOnTargets="PUBLISH">
+		<Error Condition="!Exists('$(ArtifactsFolder)\Launcher.dll')"
+			   Text="Smoke test failed: published launcher assembly was not found at $(ArtifactsFolder)\Launcher.dll." />
+		<Message Text="Smoke test passed: $(ArtifactsFolder)\Launcher.dll is available." />
+	</Target>
 	<!-- Build docs locally for testing -->
 	<Target Name="MKDOCS" >
 		<Exec Command='pip install mkdocs' WorkingDirectory="$(SolutionDir)"/>
