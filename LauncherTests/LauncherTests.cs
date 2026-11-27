@@ -86,6 +86,43 @@ namespace Ntools.Tests
         }
 
         [TestMethod]
+        public void LockStartResolvesExecutableFromPath()
+        {
+            var systemDirectory = Environment.GetFolderPath(Environment.SpecialFolder.System);
+            var workingDirectory = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N"));
+            Directory.CreateDirectory(workingDirectory);
+
+            try
+            {
+                var process = new Process
+                {
+                    StartInfo = new ProcessStartInfo
+                    {
+                        WorkingDirectory = workingDirectory,
+                        FileName = "cmd",
+                        Arguments = "/c exit 0",
+                        RedirectStandardOutput = true,
+                        RedirectStandardError = true,
+                        UseShellExecute = false
+                    }
+                };
+                process.StartInfo.Environment["PATH"] = systemDirectory;
+
+                var result = process.LockStart(false);
+
+                Assert.AreEqual(0, result.Code, string.Join(Environment.NewLine, result.Output));
+                Assert.IsTrue(string.Equals(
+                    Path.Combine(systemDirectory, "cmd.exe"),
+                    process.StartInfo.FileName,
+                    StringComparison.OrdinalIgnoreCase));
+            }
+            finally
+            {
+                Directory.Delete(workingDirectory, recursive: true);
+            }
+        }
+
+        [TestMethod]
         public void LockStartFailTest()
         {
             // Arrange

@@ -2,6 +2,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading;
 
 namespace Ntools
@@ -9,7 +10,7 @@ namespace Ntools
     public static class Launcher 
     {
         /// <summary>
-        /// Locks the file, verifies the digital signature, and starts the process.
+        /// Locks the executable, verifies its digital signature, and starts it. Bare executable names are resolved from PATH.
         /// </summary>
         /// <param name="process">The Process object representing the executable to launch.</param>
         /// <param name="verbose">Whether or not to output additional verbose messages.</param>
@@ -25,23 +26,24 @@ namespace Ntools
                 return ResultHelper.Fail(-1, $"Working directory '{process.StartInfo.WorkingDirectory}' is not path rooted");
             }
 
-            // verify that file exists
-            var executable = Path.Combine(process.StartInfo.WorkingDirectory, process.StartInfo.FileName);
-            if (!File.Exists(executable))
+            var executable = ResolveExecutablePath(process.StartInfo);
+            if (executable is null)
             {
-                return ResultHelper.Fail(-1, $"File '{executable}' not found");
+                var expectedPath = Path.Combine(process.StartInfo.WorkingDirectory, process.StartInfo.FileName);
+                return ResultHelper.Fail(-1, $"File '{expectedPath}' not found");
             }
 
             // Lock the file for reading
-            using (FileStream fileStream = new(Path.Combine(process.StartInfo.WorkingDirectory, process.StartInfo.FileName), FileMode.Open, FileAccess.Read, FileShare.Read))
+            using (FileStream fileStream = new(executable, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
                 // Check for valid digital signature
                 if (!SignatureVerifier.VerifyDigitalSignature(fileStream.Name))
                 {
-                    result = ResultHelper.Fail(-1, $"File '{process.StartInfo.FileName}' is not digitally signed");
+                    result = ResultHelper.Fail(-1, $"File '{executable}' is not digitally signed");
                 }
                 else
                 {
+                    process.StartInfo.FileName = executable;
                     // Start the process.
                     result = process.Start(verbose);
                 }
@@ -51,7 +53,7 @@ namespace Ntools
         }
 
         /// <summary>
-        /// Locks the file, and starts the process.
+        /// Locks the executable and starts it. Bare executable names are resolved from PATH.
         /// </summary>
         /// <param name="process">The Process object representing the executable to launch.</param>
         /// <param name="verbose">Whether or not to output additional verbose messages.</param>
@@ -67,23 +69,84 @@ namespace Ntools
                 return ResultHelper.Fail(-1, $"Working directory {process.StartInfo.WorkingDirectory} is not path rooted");
             }
 
-            // verify that file exists
-            var executable = Path.Combine(process.StartInfo.WorkingDirectory, process.StartInfo.FileName);
-            if (!File.Exists(executable))
+            var executable = ResolveExecutablePath(process.StartInfo);
+            if (executable is null)
             {
-                return ResultHelper.Fail(-1, $"File {executable} not found");
+                var expectedPath = Path.Combine(process.StartInfo.WorkingDirectory, process.StartInfo.FileName);
+                return ResultHelper.Fail(-1, $"File {expectedPath} not found");
             }
 
             // Lock the file for reading
-            using (FileStream fileStream = new(Path.Combine(process.StartInfo.WorkingDirectory, process.StartInfo.FileName), FileMode.Open, FileAccess.Read, FileShare.Read))
+            using (FileStream fileStream = new(executable, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
-                    // Start the process.
-                    result = process.Start(verbose);
+                process.StartInfo.FileName = executable;
+                // Start the process.
+                result = process.Start(verbose);
             }
 
 
             return result;
         }
+
+        private static string ResolveExecutablePath(ProcessStartInfo startInfo)
+        {
+            var fileName = startInfo.FileName;
+            var workingDirectory = startInfo.WorkingDirectory;
+            var localPath = Path.GetFullPath(fileName, workingDirectory);
+            if (File.Exists(localPath))
+            {
+                return localPath;
+            }
+
+            if (Path.IsPathRooted(fileName) || !string.IsNullOrEmpty(Path.GetDirectoryName(fileName)))
+            {
+                return null;
+            }
+
+            var pathValue = startInfo.Environment.TryGetValue("PATH", out var path)
+                ? path
+                : string.Empty;
+            var extensions = GetExecutableExtensions(startInfo);
+
+            foreach (var directory in pathValue.Split(Path.PathSeparator, StringSplitOptions.RemoveEmptyEntries))
+            {
+                var pathDirectory = directory.Trim().Trim('"');
+                if (pathDirectory.Length == 0)
+                {
+                    continue;
+                }
+
+                foreach (var extension in extensions)
+                {
+                    var candidate = Path.GetFullPath(Path.Combine(pathDirectory, fileName + extension), workingDirectory);
+                    if (File.Exists(candidate))
+                    {
+                        return candidate;
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        private static string[] GetExecutableExtensions(ProcessStartInfo startInfo)
+        {
+            if (Path.HasExtension(startInfo.FileName))
+            {
+                return [string.Empty];
+            }
+
+            var pathExtValue = startInfo.Environment.TryGetValue("PATHEXT", out var pathExt)
+                ? pathExt
+                : null;
+            var extensions = string.IsNullOrWhiteSpace(pathExtValue)
+                ? new[] { ".COM", ".EXE", ".BAT", ".CMD" }
+                : pathExtValue.Split(Path.PathSeparator, StringSplitOptions.RemoveEmptyEntries);
+
+            return new[] { string.Empty }.Concat(extensions.Select(extension =>
+                extension.StartsWith('.') ? extension : $".{extension}")).ToArray();
+        }
+
         /// <summary>
         /// Starts the process and handles the output redirection or waiting for the process to exit.
         /// </summary>
